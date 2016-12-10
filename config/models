@@ -1,0 +1,16 @@
+User
+    name       Text sqltype=varchar(255)
+    password   Text
+    UniqueUser name
+    Primary    name
+
+List
+    name       Text
+    owner      Text sqltype=varchar(255)
+    isTemplate Bool
+    Foreign    User fkUser owner
+
+Item
+    text       Text
+    status     Bool
+    list       ListId

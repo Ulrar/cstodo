@@ -1,0 +1,23 @@
+<h1>#{pageName}
+$if not $ null filterName
+  <select id="currentUser" onchange="switchList(this)">
+    <option value="@{ListsR}">All
+    $forall Entity _ user <- users
+      <option value="@{ListsForUserR $ userName user}">#{userName user}
+<form .form-inline method=post action=@{postRoute} enctype=#{enctype}>
+  <table .table .table-hover>
+    $if null lists
+      <p>No lists yet
+    $else
+      $forall Entity id list <- lists
+        <tr>
+          <td>
+            <a href=@{ListR id}>#{listName list}
+          <td>
+            <a class="delete" href="#" data-url="@{ListR id}">Delete
+            <a class="copy"   href="#" data-url="/template/copy/#{fromSqlKey id}/">Copy
+    <tr>
+      <td>
+        ^{newListForm}
+      <td>
+        <button type="submit" .btn .btn-default>Submit

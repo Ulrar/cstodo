@@ -1,0 +1,9 @@
+function registerTick(id)
+{
+  var checkbox = $("#" + id).prop('checked');
+  $.post('/ajax/item/' + id)
+  .error(function()
+  {
+     $("#" + id).prop('checked', checkbox ? false : true); 
+  });
+}

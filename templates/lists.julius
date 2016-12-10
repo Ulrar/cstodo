@@ -1,0 +1,9 @@
+function switchList(sel)
+{
+  window.location.replace($(sel).val());
+}
+
+$( document ).ready(function()
+{
+  $("#currentUser option:contains(" + #{toJSON filterName} + ")").attr('selected', 'selected');
+});
