@@ -1,17 +1,17 @@
 <h1>#{listName list}
-<table .table .table-hover>
-  $forall (Entity itemid item) <- items
+<form .form-inline method=post action=@{ListR listId} enctype=#{enctype}>
+  <table .table .table-hover>
+    $forall (Entity itemid item) <- items
+      <tr>
+        <td>#{itemText item}
+        <td>
+          $if itemStatus item
+            <input type="checkbox" onclick="registerTick('#{fromSqlKey itemid}')" id="#{fromSqlKey itemid}" checked>
+          $else
+            <input type="checkbox" onclick="registerTick('#{fromSqlKey itemid}')" id="#{fromSqlKey itemid}">
+        <td>
+          <a class="delete" href="#" data-url="@{AjaxItemR itemid}">Delete
     <tr>
-      <td>#{itemText item}
-      <td>
-        $if itemStatus item
-          <input type="checkbox" onclick="registerTick('#{fromSqlKey itemid}')" id="#{fromSqlKey itemid}" checked>
-        $else
-          <input type="checkbox" onclick="registerTick('#{fromSqlKey itemid}')" id="#{fromSqlKey itemid}">
-      <td>
-        <a class="delete" href="#" data-url="@{AjaxItemR itemid}">Delete
-  <tr>
-    <form .form-inline method=post action=@{ListR listId} enctype=#{enctype}>
       <td>
         ^{newItemForm}
       <td>
