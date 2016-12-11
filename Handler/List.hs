@@ -6,11 +6,10 @@ import Database.Persist.Sql
 import qualified Data.Text as T
 
 itemForm :: ListId -> AForm Handler Item
-itemForm id = Item
+itemForm listId = Item
   <$> areq textField (bfs ("Text" :: Text)) Nothing
   <*> areq hiddenField "" (Just False)
-  <*> areq hiddenField "" (Just id)
- -- <*  bootstrapSubmit (BootstrapSubmit ("Add" :: Text) "btn-default" [("attribute-name","attribute-value")])
+  <*> areq hiddenField "" (Just listId)
 
 getListR :: ListId -> Handler Html
 getListR listId = do
