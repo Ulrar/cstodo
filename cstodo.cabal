@@ -25,7 +25,6 @@ library
                      Handler.Lists
                      Handler.List
                      Handler.AjaxItem
-                     Handler.Item
                      Handler.Templates
                      Handler.TemplateCopy
 

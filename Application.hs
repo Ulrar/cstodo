@@ -46,7 +46,6 @@ import Handler.Common
 import Handler.Lists
 import Handler.List
 import Handler.AjaxItem
-import Handler.Item
 import Handler.Templates
 import Handler.TemplateCopy
 

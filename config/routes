@@ -11,6 +11,5 @@
 
 /list/#ListId ListR GET POST DELETE
 /ajax/item/#ItemId AjaxItemR POST DELETE
-/item/#ItemId ItemR DELETE
 /templates TemplatesR GET POST
 /template/copy/#ListId/#Text TemplateCopyR GET

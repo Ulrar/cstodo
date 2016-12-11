@@ -156,7 +156,6 @@ instance Yesod App where
     isAuthorized (ListR _)  _ = isLoggedIn
     isAuthorized TemplatesR _ = isLoggedIn
     isAuthorized (TemplateCopyR _ _) _ = isLoggedIn
-    isAuthorized (ItemR _) _ = isLoggedIn
     isAuthorized (AjaxItemR _) _ = isLoggedIn
 
     -- This function creates static content files in the static folder

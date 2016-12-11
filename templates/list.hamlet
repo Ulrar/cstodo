@@ -9,7 +9,7 @@
         $else
           <input type="checkbox" onclick="registerTick('#{fromSqlKey itemid}')" id="#{fromSqlKey itemid}">
       <td>
-        <a class="delete" href="#" data-url="@{ItemR itemid}">Delete
+        <a class="delete" href="#" data-url="@{AjaxItemR itemid}">Delete
   <tr>
     <form .form-inline method=post action=@{ListR listId} enctype=#{enctype}>
       <td>

@@ -11,5 +11,7 @@ postAjaxItemR itemId = do
       _ <- runDB $ update itemId [ItemStatus =. (if itemStatus item then False else True)]
       returnJson True
 
-deleteAjaxItemR :: ItemId -> Handler Html
-deleteAjaxItemR itemId = error "Not yet implemented: deleteAjaxItemR"
+deleteAjaxItemR :: ItemId -> Handler RepPlain
+deleteAjaxItemR itemId = do
+  runDB $ delete itemId
+  return $ RepPlain ""
