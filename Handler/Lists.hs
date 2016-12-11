@@ -15,7 +15,7 @@ getLists :: Text -> Bool -> HandlerT App IO Html
 getLists username doFilter = do
   lists <- runDB $ selectList (if doFilter then [ListOwner ==. username] else [ListIsTemplate ==. False]) [Desc ListId]
   (newListForm, enctype) <- generateFormPost $ renderBootstrap3 BootstrapInlineForm (listForm username)
-  users <- runDB $ selectList [] [Asc UserName]
+  users <- runDB $ selectList [UserName !=. "template"] [Asc UserName]
   let filterName = if doFilter then username else "All"
   let pageName = T.unpack $ "Lists"
   let postRoute = ListsR
