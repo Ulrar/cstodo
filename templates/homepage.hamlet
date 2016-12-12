@@ -1,2 +1,7 @@
-<h1.jumbotron>
-  Welcome to Yesod!
+<form method="post" action=@{HomeR}>
+  <label for="password1">New password</label>
+  <input id="password1" name="password1" type="password" required value=""><br />
+  <label for="password2">Again</label>
+  <input id="password2" name="password2" type="password" required value=""><br />
+  <button type="submit" .btn .btn-default>Submit
+<br />
