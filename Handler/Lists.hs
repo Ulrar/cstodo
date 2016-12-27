@@ -11,6 +11,11 @@ listForm username = List
   <*> areq hiddenField "" (Just username)
   <*> areq hiddenField "" (Just False)
 
+getCompletionValue (Entity lid list) = do
+  total <- runDB $ count [ItemList ==. lid]
+  numDone <- runDB $ count [ItemStatus ==. True, ItemList ==. lid]
+  return ((fromIntegral numDone) / (fromIntegral total) * 100, (Entity lid list))
+
 getLists :: Text -> Bool -> HandlerT App IO Html
 getLists username doFilter = do
   lists <- runDB $ selectList (if doFilter then [ListOwner ==. username] else [ListIsTemplate ==. False]) [Desc ListId]
@@ -19,6 +24,7 @@ getLists username doFilter = do
   let filterName = if doFilter then username else "All"
   let pageName = T.unpack $ "Lists"
   let postRoute = ListsR
+  lists2 <- mapM getCompletionValue lists
   defaultLayout $ do
     setTitle "Lists"
     $(widgetFile "lists")

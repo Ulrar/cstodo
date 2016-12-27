@@ -9,10 +9,13 @@ $if not $ null filterName
     $if null lists
       <p>No lists yet
     $else
-      $forall Entity id list <- lists
+      $forall (num, Entity id list) <- lists2
         <tr>
           <td>
             <a href=@{ListR id}>#{listName list}
+          $if not $ null filterName
+            <td>
+              <span>#{show $ truncate num}%
           <td>
             <a class="delete" href="#" data-url="@{ListR id}">Delete
             <a class="copy"   href="#" data-url="/template/copy/#{fromSqlKey id}/">Copy

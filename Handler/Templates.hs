@@ -11,6 +11,8 @@ tplForm = List
   <*> areq hiddenField "" (Just "template")
   <*> areq hiddenField "" (Just True)
 
+adaptToTemplate list = (0, list)
+
 getTemplatesR :: Handler Html
 getTemplatesR = do
   lists <- runDB $ selectList [ListIsTemplate ==. True] [Desc ListId]
@@ -19,6 +21,7 @@ getTemplatesR = do
   let filterName = "" :: Text
   let pageName = T.unpack "Templates"
   let postRoute = TemplatesR
+  let lists2 = map adaptToTemplate lists
   defaultLayout $ do
     setTitle "Templates"
     $(whamletFile "templates/lists.hamlet")
