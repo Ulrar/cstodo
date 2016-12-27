@@ -1,0 +1,17 @@
+# Building
+You need to install stack (https://docs.haskellstack.org/en/stable/README/), then inside
+the cloned repo :
+
+`stack build`
+
+The binary's path should be given at the end, something like this in my case :
+
+`.stack-work/install/x86_64-linux/lts-6.26/7.10.3/bin/cstodo`
+
+# Devel
+You can use
+
+`stack exec -- yesod devel`
+
+to start a development server that will recompile at each change in the sources
+and start the binary on port 3000.
