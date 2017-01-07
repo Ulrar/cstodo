@@ -14,3 +14,4 @@ Item
     text       Text
     status     Bool
     list       ListId
+    order      Int  default=0

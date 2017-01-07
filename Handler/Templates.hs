@@ -11,6 +11,7 @@ tplForm = List
   <*> areq hiddenField "" (Just "template")
   <*> areq hiddenField "" (Just True)
 
+adaptToTemplate :: Num t => t1 -> (t, t1)
 adaptToTemplate list = (0, list)
 
 getTemplatesR :: Handler Html
