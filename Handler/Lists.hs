@@ -13,8 +13,12 @@ listForm username = List
 
 getCompletionValue (Entity lid list) = do
   total <- runDB $ count [ItemList ==. lid]
-  numDone <- runDB $ count [ItemStatus ==. True, ItemList ==. lid]
-  return ((fromIntegral numDone) / (fromIntegral total) * 100, (Entity lid list))
+  if total == 0
+    then
+      return (0, (Entity lid list))
+    else do
+      numDone <- runDB $ count [ItemStatus ==. True, ItemList ==. lid]
+      return ((fromIntegral numDone) / (fromIntegral total) * 100, (Entity lid list))
 
 getLists :: Text -> Bool -> HandlerT App IO Html
 getLists username doFilter = do
