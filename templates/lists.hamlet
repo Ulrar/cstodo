@@ -1,10 +1,10 @@
 <h1>#{pageName}
 $if not $ null filterName
   <select id="currentUser" onchange="switchList(this)">
-    <option value="@{ListsR}">All
+    <option value="@{ListsR category}">All
     $forall Entity _ user <- users
-      <option value="@{ListsForUserR $ userName user}">#{userName user}
-<form .form-inline method=post action=@{postRoute} enctype=#{enctype}>
+      <option value="@{ListsForUserR category $ userName user}">#{userName user}
+<form .form-inline method=post action=@{postRoute category} enctype=#{enctype}>
   <table .table .table-hover>
     $if null lists
       <p>No lists yet
@@ -18,9 +18,23 @@ $if not $ null filterName
               <span>#{show $ truncate num}%
           <td>
             <a class="delete" href="#" data-url="@{ListR id}">Delete
-            <a class="copy"   href="#" data-url="/template/copy/#{fromSqlKey id}/">Copy
+            <a class="copy"   href="#" onclick="copyDialog(#{fromSqlKey id}, '#{listName list}')">Copy
     <tr>
       <td>
         ^{newListForm}
       <td>
         <button type="submit" .btn .btn-default>Submit
+<div class="modal" id="copy-dialog" style="display: none">
+  <h1 id="copy-title">
+    Copying
+  <div class="form-group required">
+   <label for="newName">
+     Name : 
+   <input id="copy-name" class="form-control" type="text" name="newName">
+   <br>
+   <label for="newCat">
+     Category : 
+   <input id="copy-category" class="form-control" type="text" name="newCat">
+   <br>
+   <input id="copy-id" type="hidden" value="0">
+   <a href="#" id="copy-confirm">Confirm

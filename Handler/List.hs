@@ -37,9 +37,21 @@ postListR listId = do
     FormSuccess item -> do
       _ <- runDB $ insert item
       redirect (ListR listId)
-    _ -> redirect ListsR
+    _ -> redirect HomeR
 
 deleteListR :: ListId -> Handler RepPlain
 deleteListR listId = do
   runDB $ deleteCascade listId
   return $ RepPlain ""
+
+getListCopyR :: ListId -> Text -> Text -> Handler Text
+getListCopyR listId newName newCat = do
+  Entity _ user <- requireAuth
+  items <- runDB $ selectList [ItemList ==. listId] [Asc ItemId]
+  let nList = List { listName = newName, listOwner = userName user, listCategory = newCat }
+  nid <- runDB $ insert nList
+  forM_ items $ \(Entity _ item) -> do
+    _ <- runDB $ insert $ item { itemList = nid }
+    return ()
+  r <- getUrlRender
+  return $ r $ ListR nid

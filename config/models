@@ -7,7 +7,7 @@ User
 List
     name       Text
     owner      Text sqltype=varchar(255)
-    isTemplate Bool
+    category   Text sqltype=varchar(255)
     Foreign    User fkUser owner
 
 Item

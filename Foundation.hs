@@ -16,6 +16,7 @@ import Yesod.Auth.Message
 import qualified Yesod.Core.Unsafe as Unsafe
 import qualified Data.CaseInsensitive as CI
 import qualified Data.Text.Encoding as TE
+import qualified Data.List as L
 
 -- | The foundation datatype for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
@@ -56,6 +57,17 @@ mkYesodData "App" $(parseRoutesFile "config/routes")
 -- | A convenient synonym for creating forms.
 type Form x = Html -> MForm (HandlerT App IO) (FormResult x, Widget)
 
+
+-- Define the menu items of the header.
+menuRec [] = []
+menuRec [x] = [ NavbarLeft $ MenuItem
+				        { menuItemLabel = listCategory $ entityVal x
+                , menuItemRoute = ListsR $ listCategory (entityVal x)
+                , menuItemAccessCallback = True
+                }
+              ]
+menuRec (x:xs) = (menuRec [x]) ++ (menuRec xs)
+
 -- Please see the documentation for the Yesod typeclass. There are a number
 -- of settings which can be configured by overriding methods here.
 instance Yesod App where
@@ -93,37 +105,30 @@ instance Yesod App where
         -- Get the breadcrumbs, as defined in the YesodBreadcrumbs instance.
         (title, parents) <- breadcrumbs
 
-        -- Define the menu items of the header.
---        let menuItems =	[ NavbarLeft $ MenuItem
---            							{ menuItemLabel = "Lists"
---            							, menuItemRoute = ListsR
---            							, menuItemAccessCallback = True
---            							}
---          							]
+        cats <- runDB $ selectList [] [Asc ListCategory]
+        --categories <- select $ from $ \list -> do
+          --return list
+        -- FIXME: Moche, Il faut utiliser Esqueleto ici
+        let categories = L.nubBy (\(Entity _ x) (Entity _ y) -> listCategory x == listCategory y) cats
 
-        let menu = [ NavbarLeft $ MenuItem
-                     { menuItemLabel = "Lists"
-                     , menuItemRoute = ListsR
-                     , menuItemAccessCallback = True
-                     },
-                     NavbarLeft $ MenuItem
-                     { menuItemLabel = "Templates"
-                     , menuItemRoute = TemplatesR
-                     , menuItemAccessCallback = True
-                     }
-                   ]
- 
         let menuItems = if isJust mauth
-                          then menu ++ [ NavbarRight $ MenuItem
+                          then menuRec categories ++ [ NavbarRight $ MenuItem
                                          { menuItemLabel = "Logout"
                                          , menuItemRoute = AuthR LogoutR
                                          , menuItemAccessCallback = True
                                          }
                                        ]
                           else
-                            menu
+                            menuRec categories
 
-        let navbarLeftMenuItems = [x | NavbarLeft x <- menuItems]
+        let homeItem = [ NavbarLeft $ MenuItem
+                         { menuItemLabel = "Home"
+                         , menuItemRoute = HomeR
+                         , menuItemAccessCallback = True
+                         }
+                       ]
+
+        let navbarLeftMenuItems = [x | NavbarLeft x <- homeItem ++ menuItems]
         let navbarRightMenuItems = [x | NavbarRight x <- menuItems]
 
         let navbarLeftFilteredMenuItems = [x | x <- navbarLeftMenuItems, menuItemAccessCallback x]
@@ -138,6 +143,7 @@ instance Yesod App where
         pc <- widgetToPageContent $ do
             addStylesheet $ StaticR css_bootstrap_css
             addScript $ StaticR js_helpers_js
+            addScript $ StaticR js_jquery_the_modal_js
             $(widgetFile "default-layout")
         withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
 
@@ -151,11 +157,10 @@ instance Yesod App where
     isAuthorized (StaticR _) _ = return Authorized
 
     isAuthorized HomeR _ = isLoggedIn
-    isAuthorized ListsR _ = isLoggedIn
-    isAuthorized (ListsForUserR _) _ = isLoggedIn
+    isAuthorized (ListsR _) _ = isLoggedIn
+    isAuthorized (ListsForUserR _ _) _ = isLoggedIn
     isAuthorized (ListR _)  _ = isLoggedIn
-    isAuthorized TemplatesR _ = isLoggedIn
-    isAuthorized (TemplateCopyR _ _) _ = isLoggedIn
+    isAuthorized (ListCopyR _ _ _) _ = isLoggedIn
     isAuthorized (AjaxItemR _) _ = isLoggedIn
 
     -- This function creates static content files in the static folder

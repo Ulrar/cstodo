@@ -6,10 +6,9 @@
 
 / HomeR GET POST
 
-/lists ListsR GET POST
-/lists/#Text ListsForUserR GET
+/lists/#Text ListsR GET POST
+/lists/#Text/#Text ListsForUserR GET
 
 /list/#ListId ListR GET POST DELETE
+/copy/list/#ListId/#Text/#Text ListCopyR GET
 /ajax/item/#ItemId AjaxItemR POST DELETE
-/templates TemplatesR GET POST
-/template/copy/#ListId/#Text TemplateCopyR GET

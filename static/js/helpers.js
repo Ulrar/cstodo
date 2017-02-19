@@ -1,7 +1,7 @@
 $(function()
 {
         delHelper();
-        copyHelper();
+//       copyHelper();
 });
 
 function delHelper()
@@ -21,7 +21,7 @@ function delHelper()
   });
 }
 
-function copyHelper()
+/*function copyHelper()
 {
   $("a.copy").click(function()
   {
@@ -37,4 +37,4 @@ function copyHelper()
     });
   return false;
   });
-}
+}*/

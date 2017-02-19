@@ -6,4 +6,30 @@ function switchList(sel)
 $( document ).ready(function()
 {
   $("#currentUser option:contains(" + #{toJSON filterName} + ")").attr('selected', 'selected');
+  copyHelper();
 });
+
+function copyDialog(id, title)
+{
+  $("#copy-title").html("Copying " + title);
+  $("#copy-id").val(id);
+  $("#copy-dialog").modal().open();
+}
+
+function copyHelper()
+{
+  $("#copy-confirm").click(function()
+  {
+    $.ajax(
+    {
+      type: "GET",
+      /* FIXME: Ouh c'est moche ça, ouh c'est moche ! */
+      url: "/copy/list/" + $("#copy-id").val() + "/" + $("#copy-name").val() + "/" + $("#copy-category").val(),
+      success: function(data, status, xhr)
+      {
+        window.location.replace(data);
+      }
+    });
+  return false;
+  });
+}
