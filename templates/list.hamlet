@@ -16,3 +16,6 @@
         ^{newItemForm}
       <td>
         <button type="submit" .btn .btn-default>Submit
+<form .form-inline method=post action=@{AjaxWatchingR listId}>
+  <input type="text" name="watching" value="#{watching}">
+  <button type="submit" .btn .btn-default>Submit

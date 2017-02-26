@@ -10,6 +10,7 @@ listForm category username = List
   <$> areq textField (bfs ("Name" :: Text)) Nothing
   <*> areq hiddenField "" (Just username)
   <*> areq hiddenField "" (Just category)
+  <*> areq hiddenField "" (Just Nothing)
 
 getCompletionValue (Entity lid list) = do
   total <- runDB $ count [ItemList ==. lid]

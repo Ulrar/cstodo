@@ -25,6 +25,7 @@ library
                      Handler.Lists
                      Handler.List
                      Handler.AjaxItem
+                     Handler.AjaxWatching
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT
@@ -86,6 +87,7 @@ library
                  , fast-logger                   >= 2.2        && < 2.5
                  , wai-logger                    >= 2.2        && < 2.4
                  , file-embed
+                 , mime-mail
                  , safe
                  , unordered-containers
                  , containers

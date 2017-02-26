@@ -17,8 +17,8 @@ $if not $ null filterName
             <td>
               <span>#{show $ truncate num}%
           <td>
-            <a class="delete" href="#" data-url="@{ListR id}">Delete
             <a class="copy"   href="#" onclick="copyDialog(#{fromSqlKey id}, '#{listName list}')">Copy
+            <a class="delete" href="#" data-url="@{ListR id}">Delete
     <tr>
       <td>
         ^{newListForm}

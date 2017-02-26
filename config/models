@@ -9,6 +9,7 @@ List
     owner      Text sqltype=varchar(255)
     category   Text sqltype=varchar(255)
     Foreign    User fkUser owner
+    watching   Text Maybe
 
 Item
     text       Text

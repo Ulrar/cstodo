@@ -4,7 +4,9 @@ import Import
 import Yesod.Form.Bootstrap3
 import Database.Persist.Sql
 import Data.List (maximumBy)
+import qualified Network.Mail.Mime as Mail
 import qualified Data.Text as T
+import qualified Data.Text.Lazy as LT
 
 itemForm :: ListId -> Int -> AForm Handler Item
 itemForm listId order = Item
@@ -26,6 +28,9 @@ getListR listId = do
                       else
                         itemOrder . entityVal $ Data.List.maximumBy (comparing $ itemOrder . entityVal) items
       (newItemForm, enctype) <- generateFormPost $ renderBootstrap3 BootstrapInlineForm (itemForm listId (maxOrder + 1))
+      let watching = case listWatching list of
+                       Nothing -> ""
+                       Just w  -> w
       defaultLayout $ do
         setTitle . fromString $ T.unpack $ "CSTodo - " ++ (listName list)
         $(widgetFile "list")
@@ -36,6 +41,16 @@ postListR listId = do
   case result of
     FormSuccess item -> do
       _ <- runDB $ insert item
+      list <- runDB $ get404 listId
+      case listWatching list of
+        Nothing -> return ()
+        Just watching -> mapM_ (\address ->
+                          liftIO $ Mail.renderSendMail $ Mail.simpleMail'
+                            (Mail.Address Nothing address)
+                            (Mail.Address Nothing "todo@cognix-systems.com")
+                            ("[TODO] Task added to watched list : " ++ listName list)
+                            (LT.fromStrict $ itemText item))
+                          (T.splitOn "," watching)
       redirect (ListR listId)
     _ -> redirect HomeR
 
@@ -48,7 +63,7 @@ getListCopyR :: ListId -> Text -> Text -> Handler Text
 getListCopyR listId newName newCat = do
   Entity _ user <- requireAuth
   items <- runDB $ selectList [ItemList ==. listId] [Asc ItemId]
-  let nList = List { listName = newName, listOwner = userName user, listCategory = newCat }
+  let nList = List { listName = newName, listOwner = userName user, listCategory = newCat, listWatching = Nothing }
   nid <- runDB $ insert nList
   forM_ items $ \(Entity _ item) -> do
     _ <- runDB $ insert $ item { itemList = nid }

@@ -162,6 +162,7 @@ instance Yesod App where
     isAuthorized (ListR _)  _ = isLoggedIn
     isAuthorized (ListCopyR _ _ _) _ = isLoggedIn
     isAuthorized (AjaxItemR _) _ = isLoggedIn
+    isAuthorized (AjaxWatchingR _) _ = isLoggedIn
 
     -- This function creates static content files in the static folder
     -- and names them based on a hash of their content. This allows

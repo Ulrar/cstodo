@@ -12,3 +12,4 @@
 /list/#ListId ListR GET POST DELETE
 /copy/list/#ListId/#Text/#Text ListCopyR GET
 /ajax/item/#ItemId AjaxItemR POST DELETE
+/ajax/watching/#ListId AjaxWatchingR POST
