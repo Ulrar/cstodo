@@ -1,9 +1,20 @@
 <h1>#{pageName}
 $if not $ null filterName
-  <select id="currentUser" onchange="switchList(this)">
-    <option value="@{ListsR category}">All
-    $forall Entity _ user <- users
-      <option value="@{ListsForUserR category $ userName user}">#{userName user}
+  <div id="currentUser">
+    <select style="display: inline" onchange="switchList(this)">
+      $if showComplete
+        <option value="@{ListsFilteredR category True}">All
+      $else
+        <option value="@{ListsR category}">All
+      $forall Entity _ user <- users
+        $if showComplete
+          <option value="@{ListsFilteredForUserR category (userName user) True}">#{userName user}
+        $else
+          <option value="@{ListsForUserR category $ userName user}">#{userName user}
+    $if showComplete
+      <a style="display: inline; margin-left: 15px" href="@{ListsR category}">Hide complete lists
+    $else
+      <a style="display: inline; margin-left: 15px" href="@{ListsFilteredR category True}">Show complete lists
 <form .form-inline method=post action=@{postRoute category} enctype=#{enctype}>
   <table .table .table-hover>
     $if null lists

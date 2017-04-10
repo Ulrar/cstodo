@@ -6,6 +6,8 @@
 
 / HomeR GET POST
 
+/filtered/lists/#Text/#Bool ListsFilteredR GET
+/filtered/lists/#Text/#Text/#Bool ListsFilteredForUserR GET
 /lists/#Text ListsR GET POST
 /lists/#Text/#Text ListsForUserR GET
 

@@ -21,15 +21,23 @@ getCompletionValue (Entity lid list) = do
       numDone <- runDB $ count [ItemStatus ==. True, ItemList ==. lid]
       return ((fromIntegral numDone) / (fromIntegral total) * 100, (Entity lid list))
 
-getLists :: Text -> Text -> Bool -> HandlerT App IO Html
-getLists category username doFilter = do
+filterCompletesOut (num, l) = do
+  if num < 100
+    then
+      True
+    else
+      False
+
+getLists :: Text -> Text -> Bool -> Bool -> HandlerT App IO Html
+getLists category username doFilter showComplete = do
   lists <- runDB $ selectList (if doFilter then [ListOwner ==. username, ListCategory ==. category] else [ListCategory ==. category]) [Desc ListId]
   (newListForm, enctype) <- generateFormPost $ renderBootstrap3 BootstrapInlineForm (listForm category username)
   users <- runDB $ selectList [] [Asc UserName]
   let filterName = if doFilter then username else "All"
   let pageName = T.unpack $ "Lists"
   let postRoute = ListsR
-  lists2 <- mapM getCompletionValue lists
+  lists' <- mapM getCompletionValue lists
+  let lists2 = if showComplete then lists' else filter filterCompletesOut lists'
   defaultLayout $ do
     setTitle "Lists"
     $(widgetFile "lists")
@@ -37,10 +45,18 @@ getLists category username doFilter = do
 getListsR :: Text -> Handler Html
 getListsR category = do
   (Entity _ user) <- requireAuth
-  getLists category (userName user) False
+  getLists category (userName user) False False
+
+getListsFilteredR :: Text -> Bool -> Handler Html
+getListsFilteredR category showComplete = do
+  (Entity _ user) <- requireAuth
+  getLists category (userName user) False showComplete
 
 getListsForUserR :: Text -> Text -> Handler Html
-getListsForUserR category username = getLists category username True
+getListsForUserR category username = getLists category username True False
+
+getListsFilteredForUserR :: Text -> Text -> Bool -> Handler Html
+getListsFilteredForUserR category username showComplete = getLists category username True showComplete
 
 postListsR :: Text -> Handler Html
 postListsR category = do

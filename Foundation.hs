@@ -159,6 +159,8 @@ instance Yesod App where
     isAuthorized HomeR _ = isLoggedIn
     isAuthorized (ListsR _) _ = isLoggedIn
     isAuthorized (ListsForUserR _ _) _ = isLoggedIn
+    isAuthorized (ListsFilteredR _ _) _ = isLoggedIn
+    isAuthorized (ListsFilteredForUserR _ _ _) _ = isLoggedIn
     isAuthorized (ListR _)  _ = isLoggedIn
     isAuthorized (ListCopyR _ _ _) _ = isLoggedIn
     isAuthorized (AjaxItemR _) _ = isLoggedIn
