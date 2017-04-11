@@ -45,7 +45,14 @@ $if not $ null filterName
    <br>
    <label for="newCat">
      Category : 
-   <input id="copy-category" class="form-control" type="text" name="newCat">
+   <select id="select-copy-category" class="form-control" name="newCat" onChange="selectCopyChange()">
+    $forall Entity _ l <- categories
+      <option value="#{listCategory l}">#{listCategory l}
+    <option value="_other">Other
+   <div id="input-copy-cat" style="display: none">
+    <label for="otherNewCat">
+      Category Name : 
+    <input id="copy-category" class="form-control" type="text" name="otherNewCat">
    <br>
    <input id="copy-id" type="hidden" value="0">
    <a href="#" id="copy-confirm">Confirm

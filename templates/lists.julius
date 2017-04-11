@@ -9,6 +9,18 @@ $( document ).ready(function()
   copyHelper();
 });
 
+function selectCopyChange()
+{
+  if ($("#select-copy-category").val() == "_other")
+  {
+    $("#input-copy-cat").show();
+  }
+  else
+  {
+    $("#input-copy-cat").hide();
+  }
+}
+
 function copyDialog(id, title)
 {
   $("#copy-title").html("Copying " + title);
@@ -20,11 +32,21 @@ function copyHelper()
 {
   $("#copy-confirm").click(function()
   {
+    var cat = "";
+    if ($("#select-copy-category").val() == "_other")
+    {
+      cat = $("#copy-category").val();
+    }
+    else
+    {
+      cat = $("#select-copy-category").val();
+    }
+
     $.ajax(
     {
       type: "GET",
       /* FIXME: Ouh c'est moche ça, ouh c'est moche ! */
-      url: "/copy/list/" + $("#copy-id").val() + "/" + $("#copy-name").val() + "/" + $("#copy-category").val(),
+      url: "/copy/list/" + $("#copy-id").val() + "/" + $("#copy-name").val() + "/" + cat,
       success: function(data, status, xhr)
       {
         window.location.replace(data);

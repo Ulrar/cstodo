@@ -4,6 +4,7 @@ import Import
 import Yesod.Form.Bootstrap3
 import Database.Persist.Sql
 import qualified Data.Text as T
+import qualified Data.List as L
 
 listForm :: Text -> Text -> AForm Handler List
 listForm category username = List
@@ -38,6 +39,8 @@ getLists category username doFilter showComplete = do
   let postRoute = ListsR
   lists' <- mapM getCompletionValue lists
   let lists2 = if showComplete then lists' else filter filterCompletesOut lists'
+  cats <- runDB $ selectList [] [Desc ListId]
+  let categories = L.nubBy (\(Entity _ x) (Entity _ y) -> listCategory x == listCategory y) cats
   defaultLayout $ do
     setTitle "Lists"
     $(widgetFile "lists")
