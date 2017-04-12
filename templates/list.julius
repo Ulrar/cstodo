@@ -5,5 +5,20 @@ function registerTick(id)
   .error(function()
   {
      $("#" + id).prop('checked', checkbox ? false : true); 
+  })
+  .done(function()
+  {
+    if (checkbox && !$("#showCompleted").prop('checked'))
+    {
+      $("#" + id).closest('tr').fadeOut();
+    }
+  });
+}
+
+function toggleDisplayComplete()
+{
+  $('tr input:checked').each(function()
+  {
+    $(this).closest('tr').fadeToggle();
   });
 }

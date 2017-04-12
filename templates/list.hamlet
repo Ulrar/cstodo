@@ -1,14 +1,14 @@
 <h1>#{listName list}
+<div style="text-align: center; display: block;margin: 0 auto;">
+  <input type="checkbox" onclick="toggleDisplayComplete()" id="showCompleted">
+  <label style="margin-left: 15px;" for="showCompleted">Show completed
 <form .form-inline method=post action=@{ListR listId} enctype=#{enctype}>
   <table .table .table-hover>
     $forall (Entity itemid item) <- items
-      <tr>
+      <tr :itemStatus item:style="display: none;">
         <td>#{itemText item}
         <td>
-          $if itemStatus item
-            <input type="checkbox" onclick="registerTick('#{fromSqlKey itemid}')" id="#{fromSqlKey itemid}" checked>
-          $else
-            <input type="checkbox" onclick="registerTick('#{fromSqlKey itemid}')" id="#{fromSqlKey itemid}">
+          <input type="checkbox" onclick="registerTick('#{fromSqlKey itemid}')" id="#{fromSqlKey itemid}" :itemStatus item:checked>
         <td>
           <a class="delete" href="#" data-url="@{AjaxItemR itemid}">Delete
     <tr>
